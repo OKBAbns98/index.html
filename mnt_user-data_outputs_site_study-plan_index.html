@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IELTS study plan builder: a weekly plan for your target band</title><meta name="description" content="Build a free IELTS study plan from your level, target band, weeks left and weekly hours. Get a timetable, phases and tips for each skill.">
+<link rel="canonical" href="https://okbabns98.github.io/study-plan/"><meta property="og:title" content="IELTS study plan builder: a weekly plan for your target band"><meta property="og:description" content="Build a free IELTS study plan from your level, target band, weeks left and weekly hours. Get a timetable, phases and tips for each skill."><meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>:root{--bg:#F6F8F5;--surface:#fff;--ink:#0B2E22;--mute:#4D6358;--line:#D5DED7;--turf:#12633F;--on:#fff;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0A1812;--surface:#10241B;--ink:#EAF3EC;--mute:#9DB3A5;--line:#21392D;--turf:#3DBB7D;--on:#06150E;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 1.05rem/1.7 "DM Sans",system-ui,sans-serif}
+h1,h2{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.1}
+.w{max-width:760px;margin:0 auto;padding:0 20px}header{border-bottom:1px solid var(--line)}
+header .w{display:flex;justify-content:space-between;align-items:center;height:60px}
+a{color:var(--turf)}header a{color:var(--ink);font-weight:700;text-decoration:none}
+h1{font-size:clamp(2rem,5vw,3rem);margin:40px 0 12px;font-weight:800}h2{font-size:1.5rem;margin:36px 0 8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px}
+input{font:inherit;width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{font-weight:700;display:block;margin-bottom:4px}
+.big{font:800 3.4rem/1 "Bricolage Grotesque",sans-serif;color:var(--turf)}
+footer{border-top:1px solid var(--line);margin-top:48px;padding:24px 0;color:var(--mute);font-size:.92rem}
+.btn{display:inline-block;background:var(--turf);color:var(--on);padding:.7rem 1.2rem;border-radius:999px;font-weight:700;text-decoration:none}
+:focus-visible{outline:3px solid var(--turf);outline-offset:2px}@media(max-width:560px){.g{grid-template-columns:1fr}}
+select{font:inherit;width:100%;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+button.btn{border:0;cursor:pointer;font:inherit;font-weight:700}.btn.g2{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+fieldset{border:0;padding:0;margin:0 0 22px}legend{font-weight:700;margin-bottom:6px}
+.o{display:block;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;margin:6px 0;cursor:pointer;background:var(--surface)}
+.o:has(input:checked){border-color:var(--turf);background:var(--bg)}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;min-width:90px}.bar i{display:block;height:100%;background:var(--turf)}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.sc{overflow-x:auto}.hide{display:none}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.small{color:var(--mute);font-size:.92rem}
+.card+.card{margin-top:18px}.hl{background:var(--bg);border-left:4px solid var(--turf);padding:10px 14px;border-radius:8px}
+@media print{header,footer,.np{display:none}body{background:#fff;color:#000}}</style></head><body>
+<header><div class="w"><a href="../">English Arena</a><a href="../#tools">All tools</a></div></header>
+<main class="w"><h1>IELTS study plan builder</h1>
+<p>Answer five questions and get a week-by-week plan, a weekly timetable and tips for each skill. Your answers stay in your browser.</p>
+<div class="card" id="form">
+<div class="g">
+<div><label for="lv">Your current level</label><select id="lv"><option value="A1">A1 (beginner)</option><option value="A2">A2 (elementary)</option><option value="B1" selected>B1 (intermediate)</option><option value="B2">B2 (upper intermediate)</option><option value="C1">C1 (advanced)</option></select></div>
+<div><label for="tg">Target overall band</label><select id="tg"><option>5.0</option><option>5.5</option><option>6.0</option><option selected>6.5</option><option>7.0</option><option>7.5</option><option>8.0</option><option>8.5</option><option>9.0</option></select></div>
+<div><label for="wk">Weeks until your test</label><input id="wk" type="number" min="1" max="52" value="12"></div>
+<div><label for="hr">Study hours per week</label><select id="hr"><option>3</option><option>5</option><option selected>8</option><option>10</option><option>15</option><option>20</option></select></div>
+<div><label for="wsk">Your weakest skill</label><select id="wsk"><option value="">Not sure</option><option value="L">Listening</option><option value="R">Reading</option><option value="W">Writing</option><option value="S">Speaking</option></select></div>
+<div><label for="tp">Test type</label><select id="tp"><option value="A">Academic</option><option value="G">General Training</option></select></div>
+</div>
+<div class="row"><button class="btn" id="go">Create my plan</button></div>
+<p class="small">Not sure of your level? <a href="../english-level-test/">Take the free level test</a> first.</p></div>
+<div id="out" class="hide"></div></main>
+<footer><div class="w">English Arena is an independent practice site and is not affiliated with the IELTS partners. IELTS is a registered trademark of its owners. Results here are quick estimates, not official or certified scores. Check ielts.org for official test information.</div></footer>
+<script>
+const $=id=>document.getElementById(id);
+const MID={A1:2.5,A2:3.5,B1:4.5,B2:6,C1:7.5};
+const SK={L:'Listening',R:'Reading',W:'Writing',S:'Speaking',V:'Grammar and vocabulary'};
+const BASE={L:20,R:20,W:25,S:20,V:15};
+const TIPS={
+ L:['Listen once without pausing, then read the transcript and note every word you missed.','Practise numbers, dates and names, because small slips cost marks.'],
+ R:['Skim headings and first lines before reading the questions.','Review every wrong answer and find the exact sentence that proves the right one.'],
+ W:['Always plan for five minutes, and answer every part of the question.','Compare your essay with a model, then rewrite it improved two days later.'],
+ S:['Speak aloud every day, even for five minutes, and record yourself.','Extend answers with a reason and an example instead of stopping after one sentence.'],
+ V:['Learn words in phrases, with an example sentence of your own.','Keep a mistakes notebook and fix the same three errors each week.']};
+function tasks(k,t){return{
+ L:['One recording with transcript review, then a list of missed words.','Spelling and numbers drills, then one more recording.'],
+ R:['One timed passage, then review every mistake.','Skimming practice on two passages, then check your timing.'],
+ W:['One Task 2 essay in 40 minutes, then compare it with a model answer.',t==='A'?'One Task 1 chart report in 20 minutes, covering an overview and key figures.':'One Task 1 letter in 20 minutes, in the right tone.'],
+ S:['Two Part 2 cue cards with one minute of planning, recorded.','Part 1 and Part 3 questions aloud, adding reasons and examples.'],
+ V:['Ten new words with sentences, plus one grammar lesson.','Review old words, then redo the grammar exercises you missed.']}[k]}
+const q=new URLSearchParams(location.search).get('level');
+try{const s=JSON.parse(localStorage.getItem('ia:plan')||'{}');Object.keys(s).forEach(k=>{if($(k))$(k).value=s[k]});if(!q){const p=JSON.parse(localStorage.getItem('ia:profile')||'{}');if(p.level&&MID[p.level])$('lv').value=p.level}}catch(e){}
+if(q&&MID[q])$('lv').value=q;
+$('go').onclick=()=>{
+  const v=id=>$(id).value,lv=v('lv'),tg=+v('tg'),wk=Math.max(1,Math.min(52,parseInt(v('wk'))||1)),hr=+v('hr'),weak=v('wsk'),tp=v('tp');
+  try{localStorage.setItem('ia:plan',JSON.stringify({lv,tg:v('tg'),wk:String(wk),hr:v('hr'),wsk:weak,tp}))}catch(e){}
+  const gap=tg-MID[lv];
+  let verdict=gap<=0?'Your current level is already close to your target, so focus on exam technique and timing.':gap<=1?'This target is realistic with regular, focused practice.':gap<=2?'This target is ambitious. Expect several months of steady study, and consider a later test date if progress is slow.':'This target is very ambitious. Build your foundations first, and consider a later test date.';
+  if(wk<6&&gap>1)verdict+=' With fewer than six weeks to go, this plan puts exam technique ahead of new learning.';
+  const pct={...BASE};if(weak){pct[weak]+=10;Object.keys(pct).forEach(k=>{if(k!==weak)pct[k]-=2.5})}
+  const keys=['L','R','W','S','V'];
+  let p1=Math.round(wk*.35),p3=wk>=8?2:(wk>=4?1:0);if(wk<4){p1=0;p3=wk}
+  const p2=Math.max(0,wk-p1-p3);let c=1;const ph=[];
+  const add=(n,t,items)=>{if(n>0){ph.push([n===1?'Week '+c:'Weeks '+c+' to '+(c+n-1),t,items]);c+=n}};
+  add(p1,'Foundation',['Take the level test and set your scoreboard.','Work through the grammar lessons and learn 10 words a day.','Read the test format and try one question of each type, untimed.']);
+  add(p2,'Skill building',['Timed practice in every skill each week.','Write one essay a week and compare it with a model answer.','Review mistakes in a notebook and retake the level test every two weeks.']);
+  add(p3,'Exam simulation',['Do full timed practice, with Writing in 40 and 20 minutes.','Practise speaking with a timer and a recording.','Polish your weakest skill and rest the day before the test.']);
+  const days=hr<=5?['Monday','Tuesday','Thursday','Saturday']:hr<=10?['Monday','Tuesday','Wednesday','Thursday','Friday']:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const order=keys.slice().sort((a,b)=>pct[b]-pct[a]),mins=Math.max(20,Math.round(hr*60/days.length/5)*5),used={};
+  const rows=days.map((d,i)=>{const k=order[i%5];used[k]=(used[k]||0);const t=tasks(k,tp)[used[k]++%2];return`<tr><th>${d}</th><td>${SK[k]}</td><td>${mins} min</td><td>${t}</td></tr>`}).join('');
+  $('out').innerHTML=`<div class="card"><h2 style="margin-top:0">Your plan</h2>
+  <p class="hl"><strong>Current level ${lv} (about band ${MID[lv].toFixed(1)}), target ${tg.toFixed(1)}, ${wk} week${wk>1?'s':''}, ${hr} hours a week.</strong><br>${verdict}</p>
+  <p class="small">The band for your level is only a rough guide. Progress varies from person to person.</p>
+  <h2>How to split your time</h2><div class="sc"><table><tbody>${keys.map(k=>`<tr><th>${SK[k]}${k===weak?' (priority)':''}</th><td>${(hr*pct[k]/100).toFixed(1)} h a week</td><td><div class="bar"><i style="width:${pct[k]*2}%"></i></div></td></tr>`).join('')}</tbody></table></div>
+  <h2>Weekly timetable</h2><div class="sc"><table><thead><tr><th>Day</th><th>Focus</th><th>Time</th><th>What to do</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="small">Rest on the other days. Short regular sessions work better than one long one.</p>
+  <h2>Phases</h2>${ph.map(p=>`<h3 style="margin:14px 0 4px">${p[0]}: ${p[1]}</h3><ul>${p[2].map(x=>`<li>${x}</li>`).join('')}</ul>`).join('')}
+  <h2>Tips for each skill</h2>${keys.map(k=>`<p style="margin:8px 0"><strong>${SK[k]}${k===weak?' (your priority)':''}:</strong> ${TIPS[k].join(' ')}</p>`).join('')}
+  <div class="row np"><a class="btn" href="../#practice">Open the practice room</a><a class="btn g2" href="../#english">Grammar lessons</a><button class="btn g2" id="pr">Print or save as PDF</button><button class="btn g2" id="cp">Copy plan</button></div><p id="cm" class="small np" aria-live="polite"></p></div>`;
+  $('out').classList.remove('hide');$('out').scrollIntoView({behavior:'smooth'});
+  $('pr').onclick=()=>window.print();
+  $('cp').onclick=async()=>{try{await navigator.clipboard.writeText($('out').innerText);$('cm').textContent='Plan copied.'}catch(e){$('cm').textContent='Copying is not available in this browser.'}};
+};
+</script></body></html>
