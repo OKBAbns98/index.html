@@ -6,5 +6,471 @@
 <title>English Arena</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F8F5;--surface:#fff;--ink:#0B2E22;--mute:#4D6358;--line:#D5DED7;--turf:#12633F;--on:#fff;--sun:#FFC83D;--fo:#12633F;--bad:#B3261E;--ok:#12633F;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A1812;--surface:#10241B;--ink:#EAF3EC;--mute:#9DB3A5;--line:#21392D;--turf:#3DBB7D;--on:#06150E;--fo:#FFC83D;--bad:#FF8A80;--ok:#6EDBA3;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A1812;--surface:#10241B;--ink:#EAF3EC;--mute:#9DB3A5;--line:#21392D;--turf:#3DBB7D;--on:#06150E;--fo:#FFC83D;--bad:#FF8A80;--ok:#6EDBA3;color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 "DM Sans",system-ui,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:20}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.08;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--fo);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:21;background:var(--bg);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font:800 1.25rem "Bricolage Grotesque",sans-serif;text-decoration:none}
+nav{display:flex;gap:18px;font-weight:500}
+nav a{text-decoration:none;color:var(--mute)}nav a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:64px 0 72px}
+h1{font-size:clamp(2.5rem,6vw,4.3rem);font-weight:800;letter-spacing:-.025em}
+.lead{font-size:1.15rem;color:var(--mute);max-width:34ch;margin:20px 0 28px}
+.btn{font:inherit;font-weight:700;padding:.75rem 1.2rem;border-radius:999px;border:1.5px solid transparent;cursor:pointer;text-decoration:none;display:inline-block}
+.p{background:var(--turf);color:var(--on)}.g{border-color:var(--line);color:var(--ink);background:transparent}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.board{background:#0B2E22;color:#EAF3EC;border-radius:20px;padding:22px}
+.board h2{font-size:1.15rem;font-weight:600;margin-bottom:4px}
+.board p{margin:0 0 16px;color:#9DB3A5;font-size:.92rem}
+#tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;display:grid;gap:2px}
+.tile span{font-size:.92rem;color:#B9CCBF}
+.tile b{font:800 3rem/1 "Bricolage Grotesque",sans-serif;color:var(--sun);font-variant-numeric:tabular-nums}
+.step{display:flex;gap:8px;margin-top:8px}
+.step button{width:40px;height:36px;border-radius:10px;border:0;background:rgba(255,255,255,.14);color:#fff;font:700 1.2rem inherit;cursor:pointer}
+.step button:hover{background:rgba(255,255,255,.26)}
+.board :focus-visible{outline-color:var(--sun)}
+.total{background:var(--sun);color:#0B2E22;border-radius:14px;padding:16px 18px;margin-top:12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.total b{font:800 3.6rem/1 "Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums}
+.total span{font-weight:700}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2.t{font-size:clamp(1.7rem,3.6vw,2.3rem);font-weight:800;letter-spacing:-.015em;margin-bottom:8px}
+.sub{color:var(--mute);margin:0 0 24px;max-width:60ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.tabs button{font:inherit;font-weight:600;padding:.55rem 1rem;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"],.tabs button[aria-pressed="true"]{background:var(--turf);border-color:var(--turf);color:var(--on)}
+[hidden]{display:none!important}
+.passage{font:400 1.05rem/1.75 "DM Sans",serif;max-width:68ch;margin:0 0 20px}
+fieldset{border:0;padding:0;margin:0 0 18px}
+legend{font-weight:700;margin-bottom:6px;max-width:68ch}
+label.o{display:inline-flex;align-items:center;gap:6px;margin:2px 16px 2px 0;cursor:pointer}
+.fb{margin:6px 0 0;font-size:.95rem}.good{color:var(--ok)}.bad{color:var(--bad)}
+.flash{width:100%;min-height:190px;border-radius:14px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);padding:24px;text-align:left;cursor:pointer;font:inherit}
+.flash h3{font-size:2.2rem;font-weight:800}.flash p{margin:10px 0 0;max-width:52ch}.flash small{color:var(--mute)}
+.meta{color:var(--mute);margin:14px 0 0}
+textarea{width:100%;min-height:230px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;padding:14px;resize:vertical}
+.clock{font:800 2.6rem/1 "Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums}
+.bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:14px 0}
+.prompt{font-size:1.15rem;font-weight:500;max-width:62ch;margin:0 0 16px}
+ul.cue{margin:0 0 16px;padding-left:20px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700}
+.tgt{display:flex;align-items:center;justify-content:space-between;margin-top:12px}.tgt b{font:800 1.6rem "Bricolage Grotesque",sans-serif;color:var(--sun);min-width:3ch;text-align:center}.tgt .step{margin:0;align-items:center}.gapn{margin:10px 0 0;font-size:.92rem;color:#B9CCBF}
+#rp mark{background:var(--sun);color:#0B2E22;border-radius:3px;padding:0 2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.mod{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}.mod h3{font-size:1.1rem;margin-bottom:6px}.mod p{margin:0;color:var(--mute)}
+body.exam header,body.exam .hero,body.exam #english,body.exam #format,body.exam #progress,body.exam footer,body.exam #practice>.wrap>.t,body.exam #practice>.wrap>.sub{display:none}body.exam #practice{border-top:0;padding-top:24px}
+.ai{white-space:pre-wrap;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:16px;margin:14px 0 0;max-width:72ch}.ai:empty{display:none}
+svg.chart{max-width:480px;width:100%;height:auto;margin:0 0 16px;display:block}svg.chart text{fill:var(--ink);font:12px "DM Sans",sans-serif}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mute);font-size:.92rem}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:32px;padding:40px 0 48px}nav{gap:12px;font-size:.95rem}.logo span{display:none}}
+</style>
 </head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="#top" aria-label="English Arena home"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><ellipse cx="15" cy="15" rx="14" ry="10" fill="none" stroke="currentColor" stroke-width="2.5"/><ellipse cx="15" cy="15" rx="7" ry="4.5" fill="#FFC83D" stroke="currentColor" stroke-width="2.5"/></svg>English Arena</a>
+<nav aria-label="Main"><a href="#practice">Practice</a><a href="#english">English</a><a href="#format">Test format</a></nav>
+</div></header>
+<main id="top">
+<div class="wrap hero">
+<div>
+<h1>Train for every band of the IELTS.</h1>
+<p class="lead">Practise reading, vocabulary, writing and speaking in one place, and keep a running score of where you stand.</p>
+<div class="row"><a class="btn p" href="#practice">Start practising</a><a class="btn g" href="#format">See the test format</a></div>
+</div>
+<div class="board" role="group" aria-labelledby="bt">
+<h2 id="bt">Your scoreboard</h2>
+<p>Set your latest band for each skill. Your overall band updates as you go.</p>
+<div id="tiles"></div>
+<div class="total" aria-live="polite"><span id="ovd"></span><b id="ov">0.0</b></div>
+<div class="tgt"><span>Target band</span><div class="step"><button id="tm" aria-label="Lower target band">−</button><b id="tv">7.0</b><button id="tp" aria-label="Raise target band">+</button></div></div>
+<p class="gapn" id="gap" aria-live="polite"></p>
+</div>
+</div>
+
+<section id="practice"><div class="wrap">
+<h2 class="t">Practice room</h2>
+<p class="sub">Short, focused drills. Pick a skill and work through it at test pace.</p>
+<div class="row" style="margin:0 0 14px"><button class="btn g" id="exam" aria-pressed="false">Enter exam mode</button></div>
+<div class="panel">
+<div class="tabs" role="tablist" aria-label="Practice skills">
+<button role="tab" id="t-reading" aria-controls="p-reading" aria-selected="true">Reading</button>
+<button role="tab" id="t-vocab" aria-controls="p-vocab" aria-selected="false">Vocabulary</button>
+<button role="tab" id="t-writing" aria-controls="p-writing" aria-selected="false">Writing</button>
+<button role="tab" id="t-speaking" aria-controls="p-speaking" aria-selected="false">Speaking</button>
+<button role="tab" id="t-listening" aria-controls="p-listening" aria-selected="false">Listening</button>
+<button role="tab" id="t-task1" aria-controls="p-task1" aria-selected="false">Chart writing</button>
+</div>
+
+<div id="p-reading" role="tabpanel" aria-labelledby="t-reading">
+<h3 id="rt">Urban rooftop farming</h3>
+<p class="passage" id="rp">Rooftop farming has moved from curiosity to serious urban policy. In several large cities, empty roofs are now planted with vegetables, herbs and even small orchards. Supporters argue that green roofs lower building temperatures in summer, reduce storm-water runoff and bring fresh produce closer to consumers. Critics note that the soil needed is heavy, so many older buildings cannot support it without costly reinforcement. Yields are also modest: most rooftop farms supply only a small share of a city’s vegetables. Even so, researchers say the greatest benefit may be educational, since residents who grow food tend to waste less of it.</p>
+<div id="qs"></div>
+<div class="row"><button class="btn p" id="check">Check answers</button><button class="btn g" id="redo">Clear</button><button class="btn g" id="rnext">Next passage</button><button class="btn g" id="hl" title="Select text in the passage first">Highlight selected text</button><button class="btn g" id="hlc">Clear highlights</button></div>
+<p class="meta" id="score" aria-live="polite"></p>
+<div class="row" style="margin-top:12px"><button class="btn g aib" id="rai" hidden>Explain my answers with AI</button></div>
+<div class="ai" id="rout" aria-live="polite"></div>
+</div>
+
+<div id="p-listening" role="tabpanel" aria-labelledby="t-listening" hidden>
+<h3>Community centre courses</h3>
+<p class="sub" style="margin:6px 0 14px">Press play, then answer the questions. In the real test you hear each recording once.</p>
+<div class="row"><button class="btn p" id="lplay">Play recording</button><button class="btn g" id="lstop">Stop</button><button class="btn g" id="ltog">Show transcript</button></div>
+<p class="meta" id="lnote" aria-live="polite"></p>
+<p class="passage" id="ltr" hidden></p>
+<div id="lq" style="margin-top:16px"></div>
+<div class="row"><button class="btn p" id="lcheck">Check answers</button></div>
+<p class="meta" id="lscore" aria-live="polite"></p>
+<div class="row" style="margin-top:12px"><button class="btn g aib" id="lai" hidden>Get AI feedback</button></div>
+<div class="ai" id="lout" aria-live="polite"></div>
+</div>
+
+<div id="p-task1" role="tabpanel" aria-labelledby="t-task1" hidden>
+<p class="prompt">The chart shows the percentage of households with internet access in three regions in 2010 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.</p>
+<svg class="chart" viewBox="0 0 420 215" role="img" aria-label="Bar chart of the percentage of households with internet access in Regions A, B and C in 2010 and 2020">
+<g style="stroke:var(--line)"><line x1="40" x2="410" y1="180" y2="180"/><line x1="40" x2="410" y1="105" y2="105"/><line x1="40" x2="410" y1="30" y2="30"/></g>
+<text x="4" y="184">0%</text><text x="4" y="109">50%</text><text x="4" y="34">100%</text>
+<g style="stroke:var(--ink);stroke-width:.6"><g style="fill:var(--turf)"><rect x="60" y="120" width="36" height="60"/><rect x="180" y="142.5" width="36" height="37.5"/><rect x="300" y="90" width="36" height="90"/></g><g style="fill:var(--sun)"><rect x="104" y="52.5" width="36" height="127.5"/><rect x="224" y="75" width="36" height="105"/><rect x="344" y="42" width="36" height="138"/></g></g>
+<text x="100" y="198" text-anchor="middle">Region A</text><text x="220" y="198" text-anchor="middle">Region B</text><text x="340" y="198" text-anchor="middle">Region C</text>
+<rect x="60" y="2" width="12" height="12" style="fill:var(--turf)"/><text x="78" y="13">2010</text><rect x="130" y="2" width="12" height="12" style="fill:var(--sun);stroke:var(--ink);stroke-width:.6"/><text x="148" y="13">2020</text>
+</svg>
+<div class="bar"><span class="clock" id="t1clock">20:00</span><div class="row"><button class="btn p" id="t1start">Start 20-minute timer</button><button class="btn g" id="t1reset">Reset</button></div></div>
+<label for="essay1" class="sub" style="display:block;margin:0 0 8px">Write your Task 1 report (aim for at least 150 words). Your draft stays in this browser.</label>
+<textarea id="essay1" style="min-height:190px"></textarea>
+<p class="meta" id="wc1" aria-live="polite">0 words</p>
+<div class="row"><button class="btn p aib" id="t1ai" hidden>Evaluate with AI</button></div>
+<div class="ai" id="t1out" aria-live="polite"></div>
+</div>
+
+<div id="p-vocab" role="tabpanel" aria-labelledby="t-vocab" hidden>
+<button class="flash" id="card" aria-live="polite"></button>
+<div class="row" style="margin-top:14px"><button class="btn p" id="know">I know it</button><button class="btn g" id="again">Show me later</button><button class="btn g" id="vreset">Start over</button></div>
+<p class="meta" id="vprog"></p>
+</div>
+
+<div id="p-writing" role="tabpanel" aria-labelledby="t-writing" hidden>
+<p class="prompt" id="wp"></p>
+<div class="bar"><span class="clock" id="wclock">40:00</span><div class="row"><button class="btn p" id="wstart">Start 40-minute timer</button><button class="btn g" id="wreset">Reset</button><button class="btn g" id="wnew">New question</button></div></div>
+<label for="essay" class="sub" style="display:block;margin:0 0 8px">Write your Task 2 essay (aim for at least 250 words). Your draft stays in this browser.</label>
+<textarea id="essay"></textarea>
+<p class="meta" id="wc" aria-live="polite">0 words</p>
+<div class="row"><button class="btn p aib" id="wai" hidden>Evaluate with AI</button></div>
+<div class="ai" id="wout" aria-live="polite"></div>
+</div>
+
+<div id="p-speaking" role="tabpanel" aria-labelledby="t-speaking" hidden>
+<p class="prompt" id="st"></p>
+<p style="margin:0 0 6px">You should say:</p>
+<ul class="cue" id="sl"></ul>
+<div class="bar"><div><span class="clock" id="sclock">01:00</span><div class="meta" style="margin:4px 0 0" id="sphase">Part 2 gives you one minute to prepare and up to two minutes to speak.</div></div>
+<div class="row"><button class="btn p" id="sstart">Start preparing</button><button class="btn g" id="sstop">Stop</button><button class="btn g" id="snew">New cue card</button></div></div>
+<label for="stx" class="sub" style="display:block;margin:6px 0 8px">After you speak, type or dictate what you said. The AI scores the transcript, so it can’t judge pronunciation.</label>
+<textarea id="stx" style="min-height:140px"></textarea>
+<div class="row" style="margin-top:12px"><button class="btn g" id="smic" hidden>Dictate</button><button class="btn p aib" id="sai" hidden>Evaluate with AI</button></div>
+<div class="ai" id="sout" aria-live="polite"></div>
+</div>
+</div>
+</div></section>
+
+<section id="english"><div class="wrap">
+<h2 class="t">English practice</h2>
+<p class="sub">Build the grammar behind a higher band. Choose a lesson, read the explanation, then answer with instant feedback.</p>
+<div class="panel">
+<div class="tabs" id="gtabs" aria-label="Grammar lessons"></div>
+<h3 id="gt"></h3>
+<p class="passage" id="gx" style="margin:10px 0 18px"></p>
+<div id="gq"></div>
+<p class="meta" id="gs" aria-live="polite"></p>
+</div>
+<h2 class="t" style="margin-top:40px">Quick level test</h2>
+<p class="sub">Twelve questions from easy to hard. You see the answers at the end, with a rough CEFR level and an indicative IELTS range.</p>
+<div class="panel">
+<div id="lvq"></div>
+<div class="row"><button class="btn p" id="lvf">Finish test</button><button class="btn g" id="lvr">Retake</button></div>
+<p class="meta" id="lvs" aria-live="polite"></p>
+</div>
+</div></section>
+
+<section id="progress"><div class="wrap">
+<h2 class="t">Progress by module</h2>
+<p class="sub">A quick breakdown of where you stand in each part of the test. It updates as you practise.</p>
+<div class="grid" id="mods"></div>
+</div></section>
+
+<section id="format"><div class="wrap">
+<h2 class="t">The test at a glance</h2>
+<p class="sub">IELTS Academic and General Training share Listening and Speaking. Reading and Writing Task 1 differ.</p>
+<div class="scroll"><table>
+<thead><tr><th>Skill</th><th>Time</th><th>What you do</th></tr></thead>
+<tbody>
+<tr><th>Listening</th><td>About 30 minutes</td><td>Answer 40 questions across 4 recordings.</td></tr>
+<tr><th>Reading</th><td>60 minutes</td><td>Answer 40 questions across 3 passages.</td></tr>
+<tr><th>Writing</th><td>60 minutes</td><td>Task 1 (at least 150 words) and Task 2 (at least 250 words).</td></tr>
+<tr><th>Speaking</th><td>11 to 14 minutes</td><td>Interview, a talk from a cue card, then a discussion.</td></tr>
+</tbody></table></div>
+</div></section>
+</main>
+<footer><div class="wrap">English Arena is an independent practice site and is not affiliated with the IELTS partners. IELTS is a registered trademark of its owners. Check ielts.org for official test information.</div></footer>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const ld=(k,d)=>{try{const v=localStorage.getItem('ia:'+k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem('ia:'+k,JSON.stringify(v))}catch(e){}};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const mmss=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+
+/* Scoreboard */
+const names={L:'Listening',R:'Reading',W:'Writing',S:'Speaking'};
+let sc=ld('sc',{L:6.5,R:6.5,W:6,S:6});
+const desc=b=>b>=9?'Expert user':b>=8?'Very good user':b>=7?'Good user':b>=6?'Competent user':b>=5?'Modest user':b>=4?'Limited user':'Below limited user';
+function drawSc(){
+  $('#tiles').innerHTML=Object.keys(names).map(k=>`<div class="tile"><span>${names[k]}</span><b>${sc[k].toFixed(1)}</b><div class="step"><button data-k="${k}" data-d="-0.5" aria-label="Lower ${names[k]} score">−</button><button data-k="${k}" data-d="0.5" aria-label="Raise ${names[k]} score">+</button></div></div>`).join('');
+  const o=Math.round(Object.values(sc).reduce((a,b)=>a+b,0)/4*2)/2;
+  $('#ov').textContent=o.toFixed(1);$('#ovd').textContent='Overall band: '+desc(o);
+  const tg=ld('tg',7);$('#tv').textContent=tg.toFixed(1);
+  const low=Object.keys(names).filter(k=>sc[k]<tg).map(k=>names[k]+' (needs +'+(tg-sc[k]).toFixed(1)+')');
+  $('#gap').textContent=low.length?'Focus next on: '+low.join(', ')+'.':'All four skills are at or above your target.';
+}
+$('#tiles').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const k=b.dataset.k,d=+b.dataset.d;
+  sc[k]=Math.min(9,Math.max(0,sc[k]+d));sv('sc',sc);drawSc();
+  $(`#tiles button[data-k="${k}"][data-d="${b.dataset.d}"]`).focus();
+});
+drawSc();
+
+/* Tabs */
+const tabs=[...document.querySelectorAll('[role=tab]')];
+function openTab(t){tabs.forEach(x=>{const on=x===t;x.setAttribute('aria-selected',on);$('#'+x.getAttribute('aria-controls')).hidden=!on})}
+tabs.forEach((t,i)=>{t.onclick=()=>openTab(t);t.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];openTab(n);n.focus()}}});
+
+/* Reading */
+let ri=0;const bk=()=>'best'+ri;
+const TFNG=['True','False','Not given'];
+let Q=[
+ {q:'Rooftop farms now supply most of the vegetables a city needs.',o:TFNG,a:1},
+ {q:'Older buildings often need reinforcement before they can carry rooftop soil.',o:TFNG,a:0},
+ {q:'Rooftop produce costs less than supermarket produce.',o:TFNG,a:2},
+ {q:'According to researchers, the greatest benefit of rooftop farming may be…',o:['cooler buildings.','educational value.','larger harvests.'],a:1}];
+function drawQ(){
+  $('#qs').innerHTML=Q.map((x,i)=>`<fieldset><legend>${i+1}. ${x.q}</legend>${x.o.map((o,j)=>`<label class="o"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join('')}<p class="fb" id="fb${i}"></p></fieldset>`).join('');
+  $('#score').textContent=ld(bk(),null)==null?'':'Best score so far: '+ld(bk())+' out of '+Q.length+'.';
+}
+$('#check').onclick=()=>{
+  let n=0,blank=0;
+  Q.forEach((x,i)=>{
+    const c=document.querySelector(`input[name=q${i}]:checked`),fb=$('#fb'+i);
+    if(!c){blank++;fb.className='fb bad';fb.textContent='Choose an answer.';return}
+    const ok=+c.value===x.a;if(ok)n++;
+    fb.className='fb '+(ok?'good':'bad');fb.textContent=ok?'Correct.':'Not quite. The answer is “'+x.o[x.a]+'”.';
+  });
+  if(blank){$('#score').textContent=blank+' question'+(blank>1?'s':'')+' still unanswered.';return}
+  const best=Math.max(n,ld(bk(),0));sv(bk(),best);drawMods();
+  $('#score').textContent='You scored '+n+' out of '+Q.length+'. Best score so far: '+best+'.';
+};
+$('#redo').onclick=drawQ;drawQ();
+const READ=[{t:$('#rt').textContent,p:$('#rp').textContent,q:Q},{t:'The decline of handwriting',p:'Handwriting is disappearing from many classrooms as schools provide tablets and keyboards. Educators who welcome the change point out that typing is faster, and that pupils with untidy writing can finally express their ideas clearly. However, several studies suggest that writing by hand helps people remember what they learn, because the slower pace forces them to summarise rather than copy. A few schools have responded by reserving some lessons for pen and paper, while still teaching keyboard skills from an early age. Most researchers agree that neither method is entirely superior; the real question is which one suits a particular task.',q:[{q:'Typing is faster than handwriting.',o:TFNG,a:0},{q:'All schools now ban tablets in lessons.',o:TFNG,a:1},{q:'Pupils who type achieve higher exam results.',o:TFNG,a:2},{q:'Most researchers conclude that…',o:['handwriting is clearly better.','each method suits different tasks.','typing should replace handwriting.'],a:1}]}];
+$('#rnext').onclick=()=>{ri=(ri+1)%READ.length;const r=READ[ri];$('#rt').textContent=r.t;$('#rp').textContent=r.p;Q=r.q;drawQ()};
+
+/* Vocabulary */
+const V=[['mitigate','reduce how serious or harmful something is','Planting trees can mitigate the effects of urban heat.'],['ubiquitous','seeming to be everywhere','Smartphones have become ubiquitous.'],['scrutinise','examine something very closely','Researchers scrutinise the data before publishing.'],['plausible','believable or reasonable','That is a plausible explanation for the decline.'],['inevitable','certain to happen','Some change is inevitable as cities grow.'],['advocate','publicly support an idea or plan','Many experts advocate a shorter working week.'],['substantial','large in amount or importance','There has been a substantial rise in remote work.'],['fluctuate','rise and fall in an irregular way','Prices fluctuate throughout the year.'],['detrimental','causing harm','Too little sleep is detrimental to learning.'],['coherent','logical and well organised','A coherent essay moves clearly from one idea to the next.']];
+let known=ld('known',[]),cur=-1,flip=false,skip=[];
+function nextCard(){
+  const left=V.map((_,i)=>i).filter(i=>!known.includes(i));
+  const pool=left.filter(i=>!skip.includes(i));
+  if(!pool.length)skip=[];
+  const p=pool.length?pool:left;
+  cur=p.length?p.find(i=>i!==cur)??p[0]:-1;flip=false;drawCard();
+}
+function drawCard(){
+  const c=$('#card');
+  if(cur<0){c.innerHTML='<h3>All done</h3><p>You have learned all '+V.length+' words. Choose “Start over” to practise them again.</p>'}
+  else if(!flip){c.innerHTML=`<h3>${V[cur][0]}</h3><p><small>Select the card to see the meaning.</small></p>`}
+  else{c.innerHTML=`<h3>${V[cur][0]}</h3><p>${V[cur][1]}</p><p><small>“${V[cur][2]}”</small></p>`}
+  $('#vprog').textContent=known.length+' of '+V.length+' words learned.';
+}
+$('#card').onclick=()=>{if(cur>=0){flip=!flip;drawCard()}};
+$('#know').onclick=()=>{if(cur>=0&&!known.includes(cur)){known.push(cur);sv('known',known)}nextCard()};
+$('#again').onclick=()=>{if(cur>=0)skip.push(cur);nextCard()};
+$('#vreset').onclick=()=>{known=[];skip=[];sv('known',known);cur=-1;nextCard()};
+nextCard();
+
+/* Timers */
+function timer(show,done){
+  let id=null,r=0;
+  return{
+    start(sec,onEnd){clearInterval(id);r=sec;show(r);id=setInterval(()=>{r--;show(r);if(r<=0){clearInterval(id);(onEnd||done)&&(onEnd||done)()}},1000)},
+    stop(){clearInterval(id)}
+  };
+}
+
+/* Writing */
+const WP=['Some people believe university education should be free for everyone. Others think students should pay for it. Discuss both views and give your own opinion.','In many countries, people are working longer hours than before. What are the causes, and what effects does this have on individuals and families?','Some people say that governments should spend money on public transport rather than building new roads. To what extent do you agree or disagree?','Young people today rely heavily on technology to communicate. Is this a positive or a negative development?'];
+const wt=timer(s=>{$('#wclock').textContent=mmss(Math.max(0,s))},()=>{$('#wclock').textContent='00:00';$('#wstart').textContent='Start 40-minute timer'});
+$('#wp').textContent=ld('wp',WP[0]);
+$('#wstart').onclick=()=>{wt.start(2400);$('#wstart').textContent='Restart timer'};
+$('#wreset').onclick=()=>{wt.stop();$('#wclock').textContent='40:00';$('#wstart').textContent='Start 40-minute timer'};
+$('#wnew').onclick=()=>{const p=pick(WP.filter(x=>x!==$('#wp').textContent));$('#wp').textContent=p;sv('wp',p)};
+const es=$('#essay');
+function count(){const n=(es.value.trim().match(/\S+/g)||[]).length;$('#wc').textContent=n+(n===1?' word':' words')+(n<250?'. Aim for at least 250.':'. You have reached the 250-word minimum.')}
+es.value=ld('essay','');es.oninput=()=>{sv('essay',es.value);count()};count();
+
+/* Speaking */
+const SC=[
+ ['Describe a place you visited that you would like to go back to.',['where it is','when you went there','what you did there','and explain why you want to return']],
+ ['Describe a skill you learned that has been useful to you.',['what the skill is','how you learned it','when you use it','and explain why it has been useful']],
+ ['Describe a book or article that taught you something new.',['what it was about','when you read it','what you learned from it','and explain why you would recommend it']],
+ ['Describe a person who has influenced you.',['who the person is','how you know them','what they did','and explain how they influenced you']]];
+const st=timer(s=>{$('#sclock').textContent=mmss(Math.max(0,s))});
+function card(c){$('#st').textContent=c[0];$('#sl').innerHTML=c[1].map(x=>`<li>${x}</li>`).join('')}
+card(SC[0]);
+function resetS(msg){st.stop();$('#sclock').textContent='01:00';$('#sphase').textContent=msg||'Part 2 gives you one minute to prepare and up to two minutes to speak.';$('#sstart').textContent='Start preparing'}
+$('#sstart').onclick=()=>{
+  $('#sstart').textContent='Restart';$('#sphase').textContent='Prepare: jot down keywords, not full sentences.';
+  st.start(60,()=>{$('#sphase').textContent='Speak now. Keep going until the timer ends.';st.start(120,()=>{$('#sclock').textContent='00:00';$('#sphase').textContent='Time is up. Say it again and try to add more detail.';$('#sstart').textContent='Start preparing'})});
+};
+$('#sstop').onclick=()=>resetS();
+$('#snew').onclick=()=>{card(pick(SC.filter(c=>c[0]!==$('#st').textContent)));resetS()};
+/* Listening */
+const L={s:'Welcome to the Riverside Community Centre. This term we offer three evening courses. Photography classes run on Tuesdays at seven, and cost forty-five pounds for six weeks. Spanish for beginners is on Wednesdays at half past six, and costs sixty pounds. The pottery workshop meets on Thursdays and is free for members. To enrol, visit the front desk before the fifteenth of September.',q:[{q:'On which day does the photography class meet?',o:['Tuesday','Wednesday','Thursday'],a:0},{q:'How much does Spanish for beginners cost?',o:['£45','£60','Free'],a:1},{q:'Which course is free for members?',o:['Photography','Spanish','Pottery'],a:2},{q:'Enrolment closes before…',o:['5 September','15 September','25 September'],a:1}]};
+$('#ltr').textContent=L.s;
+$('#lq').innerHTML=L.q.map((x,i)=>`<fieldset><legend>${i+1}. ${x.q}</legend>${x.o.map((o,j)=>`<label class="o"><input type="radio" name="l${i}" value="${j}">${o}</label>`).join('')}<p class="fb" id="lfb${i}"></p></fieldset>`).join('');
+$('#lplay').onclick=()=>{
+  if(!('speechSynthesis' in window)){$('#lnote').textContent='Your browser can’t play speech. Use “Show transcript” instead.';return}
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(L.s);u.lang='en-GB';u.rate=.9;speechSynthesis.speak(u);
+  $('#lnote').textContent='Playing. Answer as you listen.';
+};
+$('#lstop').onclick=()=>{if('speechSynthesis' in window)speechSynthesis.cancel();$('#lnote').textContent=''};
+$('#ltog').onclick=()=>{const h=$('#ltr').hidden=!$('#ltr').hidden;$('#ltog').textContent=h?'Show transcript':'Hide transcript'};
+$('#lcheck').onclick=()=>{
+  let n=0,blank=0;
+  L.q.forEach((x,i)=>{
+    const c=document.querySelector(`input[name=l${i}]:checked`),fb=$('#lfb'+i);
+    if(!c){blank++;fb.className='fb bad';fb.textContent='Choose an answer.';return}
+    const ok=+c.value===x.a;if(ok)n++;
+    fb.className='fb '+(ok?'good':'bad');fb.textContent=ok?'Correct.':'Not quite. The answer is “'+x.o[x.a]+'”.';
+  });
+  if(!blank)sv('lbest',Math.max(n,ld('lbest',0)));
+  $('#lscore').textContent=blank?blank+' question'+(blank>1?'s':'')+' still unanswered.':'You scored '+n+' out of '+L.q.length+'.';drawMods();
+};
+
+/* Chart writing (Task 1) */
+const t1=timer(s=>{$('#t1clock').textContent=mmss(Math.max(0,s))});
+$('#t1start').onclick=()=>{t1.start(1200);$('#t1start').textContent='Restart timer'};
+$('#t1reset').onclick=()=>{t1.stop();$('#t1clock').textContent='20:00';$('#t1start').textContent='Start 20-minute timer'};
+const e1=$('#essay1');
+function c1(){const n=(e1.value.trim().match(/\S+/g)||[]).length;$('#wc1').textContent=n+(n===1?' word':' words')+(n<150?'. Aim for at least 150.':'. You have reached the 150-word minimum.')}
+e1.value=ld('essay1','');e1.oninput=()=>{sv('essay1',e1.value);c1()};c1();
+/* AI evaluation */
+let sampler=null;
+const RUBRIC='You are an experienced IELTS examiner and coach. Be honest, specific and encouraging. Write plain text only, with no markdown and no asterisks. Use short labelled lines and keep the whole answer under 300 words.';
+(window.claude?claude.use('sample'):Promise.resolve(null)).then(s=>{sampler=s;if(s)document.querySelectorAll('.aib').forEach(b=>b.hidden=false)}).catch(()=>{});
+async function runAI(btn,out,prompt){
+  if(!sampler)return;
+  btn.disabled=true;out.textContent='Evaluating…';
+  try{
+    const r=await sampler(RUBRIC+'\n\n'+prompt,{cache:false,onText:({text})=>{out.textContent=text}});
+    out.textContent=r.text;
+  }catch(e){
+    out.textContent=e&&e.code==='not_granted'?'AI evaluation needs your permission. Select the button again and allow it.':e&&e.code==='rate_limited'?'Too many requests. Please wait a minute and try again.':'Sorry, the evaluation could not be completed. Please try again.';
+  }
+  btn.disabled=false;
+}
+const need=(el,min)=>(el.value.trim().match(/\S+/g)||[]).length>=min?'':'Write at least '+min+' words first so there is enough to evaluate.';
+$('#wai').onclick=()=>{const m=need($('#essay'),80);if(m){$('#wout').textContent=m;return}
+  runAI($('#wai'),$('#wout'),'Evaluate this IELTS Writing Task 2 essay.\nQuestion: '+$('#wp').textContent+'\nEssay:\n'+$('#essay').value+'\n\nGive an estimated band (0 to 9, half bands allowed) for each of: Task Response, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy. Then give an overall band, two strengths, three priority fixes with short quotes from the essay, and one sentence rewritten at a higher level. Say that this is an estimate and not an official score.')};
+$('#t1ai').onclick=()=>{const m=need($('#essay1'),50);if(m){$('#t1out').textContent=m;return}
+  runAI($('#t1ai'),$('#t1out'),'Evaluate this IELTS Academic Writing Task 1 report.\nQuestion: '+$('#p-task1 .prompt').textContent+'\nChart data (percentage of households with internet access, 2010 to 2020): Region A 40 to 85, Region B 25 to 70, Region C 60 to 92.\nReport:\n'+$('#essay1').value+'\n\nGive an estimated band (0 to 9, half bands allowed) for each of: Task Achievement, Coherence and Cohesion, Lexical Resource, Grammatical Range and Accuracy. Check the accuracy of the figures and the overview. Then give an overall band, two strengths, three priority fixes and one improved sentence. Say that this is an estimate and not an official score.')};
+$('#sai').onclick=()=>{const m=need($('#stx'),30);if(m){$('#sout').textContent=m;return}
+  runAI($('#sai'),$('#sout'),'Evaluate this IELTS Speaking Part 2 response. The text is a transcript typed or dictated by the candidate, so ignore punctuation and spelling, and note that pronunciation cannot be judged from text.\nCue card: '+$('#st').textContent+' '+[...$('#sl').children].map(li=>li.textContent).join('; ')+'\nTranscript:\n'+$('#stx').value+'\n\nGive an estimated band (0 to 9, half bands allowed) for Fluency and Coherence, Lexical Resource, and Grammatical Range and Accuracy, then an overall estimate. Add two strengths, three ways to extend and improve the answer, and one improved version of a sentence they said. Say that this is an estimate and not an official score.')};
+$('#rai').onclick=()=>{
+  const rows=Q.map((x,i)=>{const c=document.querySelector(`input[name=q${i}]:checked`);return (i+1)+'. '+x.q+' | Student answer: '+(c?x.o[+c.value]:'no answer')+' | Correct answer: '+x.o[x.a]}).join('\n');
+  runAI($('#rai'),$('#rout'),'A student practised IELTS Reading.\nPassage:\n'+$('#rp').textContent+'\nQuestions:\n'+rows+'\n\nFor each question the student got wrong or left blank, explain where the evidence is in the passage and what probably caused the mistake. For correct answers, give one short line. Finish with two tips for this question type and one encouraging line.')};
+$('#lai').onclick=()=>{
+  const rows=L.q.map((x,i)=>{const c=document.querySelector(`input[name=l${i}]:checked`);return (i+1)+'. '+x.q+' | Student answer: '+(c?x.o[+c.value]:'no answer')+' | Correct answer: '+x.o[x.a]}).join('\n');
+  runAI($('#lai'),$('#lout'),'A student practised IELTS Listening and heard the recording once.\nTranscript:\n'+L.s+'\nQuestions:\n'+rows+'\n\nFor each question the student got wrong or left blank, quote the part of the transcript that gives the answer and explain what probably caused the mistake. For correct answers, give one short line. Finish with two listening tips and one encouraging line.')};
+(window.claude?claude.use('dictation'):Promise.resolve(null)).then(d=>{
+  if(!d)return;
+  const b=$('#smic');let on=false;b.hidden=false;
+  d.onFinal(({text})=>{const t=$('#stx');t.value+=(t.value&&!/\s$/.test(t.value)?' ':'')+text});
+  d.onState(({state})=>{on=state==='listening';b.textContent=on?'Stop dictating':'Dictate'});
+  b.onclick=()=>{if(on)d.stop();else d.start().catch(()=>{})};
+}).catch(()=>{});
+/* Target band, exam mode, highlighter, progress */
+$('#tm').onclick=()=>{sv('tg',Math.max(4,ld('tg',7)-.5));drawSc()};
+$('#tp').onclick=()=>{sv('tg',Math.min(9,ld('tg',7)+.5));drawSc()};
+$('#exam').onclick=()=>{const on=document.body.classList.toggle('exam');$('#exam').textContent=on?'Exit exam mode':'Enter exam mode';$('#exam').setAttribute('aria-pressed',on);window.scrollTo(0,0)};
+$('#hl').onmousedown=e=>e.preventDefault();
+$('#hl').onclick=()=>{const s=getSelection();if(!s.rangeCount||s.isCollapsed)return;const r=s.getRangeAt(0);if(!$('#rp').contains(r.commonAncestorContainer))return;try{r.surroundContents(document.createElement('mark'));s.removeAllRanges()}catch(e){}};
+$('#hlc').onclick=()=>{$('#rp').textContent=$('#rp').textContent};
+function drawMods(){
+  const R=[0,1].map(i=>ld('best'+i,null)),Lb=ld('lbest',null);
+  const pct=(a,b)=>a==null?'not attempted yet':a+' of '+b+' correct ('+Math.round(a/b*100)+'%)';
+  const w=t=>(t.value.trim().match(/\S+/g)||[]).length;
+  $('#mods').innerHTML=[
+    ['Reading','Passage 1: '+pct(R[0],4)+'. Passage 2: '+pct(R[1],4)+'.'],
+    ['Listening','Best result: '+pct(Lb,4)+'.'],
+    ['Writing','Task 2 draft: '+w($('#essay'))+' words. Task 1 draft: '+w($('#essay1'))+' words.'],
+    ['Speaking','Latest transcript: '+w($('#stx'))+' words.'],
+    ['Vocabulary',known.length+' of '+V.length+' words learned.']
+  ].map(([h,t])=>`<div class="mod"><h3>${h}</h3><p>${t}</p></div>`).join('');
+}
+document.addEventListener('input',drawMods);
+document.querySelectorAll('[role=tab]').forEach(t=>t.addEventListener('click',drawMods));
+$('#know').addEventListener('click',drawMods);$('#vreset').addEventListener('click',drawMods);
+drawMods();
+/* English practice */
+const sh=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+function mkQuiz(box,rows,instant){
+  const items=rows.map(r=>{const o=sh(r.slice(1,4));return{q:r[0],o,a:o.indexOf(r[1]),e:r[4]||''}});
+  box.innerHTML=items.map((x,i)=>`<fieldset><legend>${i+1}. ${x.q}</legend>${x.o.map((o,j)=>`<label class="o"><input type="radio" name="${box.id}${i}" value="${j}">${o}</label>`).join('')}<p class="fb" id="${box.id}fb${i}"></p></fieldset>`).join('');
+  const grade=i=>{const c=box.querySelector(`input[name=${box.id}${i}]:checked`);if(!c)return null;const ok=+c.value===items[i].a,f=$('#'+box.id+'fb'+i);f.className='fb '+(ok?'good':'bad');f.textContent=(ok?'Correct. ':'Not quite. The answer is “'+items[i].o[items[i].a]+'”. ')+items[i].e;return ok};
+  if(instant)box.onchange=e=>{const i=+e.target.name.slice(box.id.length);grade(i);box.querySelectorAll(`input[name=${box.id}${i}]`).forEach(r=>r.disabled=true);box.dispatchEvent(new Event('graded'))};
+  return()=>{let n=0;items.forEach((_,i)=>{if(grade(i))n++});return n};
+}
+const GR=[
+{t:'Present perfect or past simple',x:'Use the past simple for finished actions at a definite time: “I visited Rome in 2019.” Use the present perfect for experiences, or results that matter now: “I have visited Rome twice.” Words like yesterday, ago and last year need the past simple. Ever, never, already, yet, since and for usually need the present perfect.',q:[['I ___ my keys yesterday.','lost','have lost','have been losing','Yesterday points to a finished time.'],['She ___ in Leeds since 2020.','has lived','lived','is living','Since plus a starting point needs the present perfect.'],['___ you ever taken the IELTS test?','Have','Did','Do','Ever asks about experience up to now.'],['We ___ to the museum two weeks ago.','went','have gone','have been going','Ago needs the past simple.']]},
+{t:'Conditionals',x:'There are four main types. Zero: if + present, present (facts). First: if + present, will (real future). Second: if + past, would (unreal or unlikely present). Third: if + past perfect, would have (unreal past).',q:[['If it rains tomorrow, we ___ at home.','will stay','would stay','stayed','A real future possibility uses will.'],['If I ___ more time, I would study every evening.','had','have','will have','The second conditional uses a past form after if.'],['If she had left earlier, she ___ the train.','would have caught','would catch','will catch','The third conditional uses would have plus a past participle.'],['Water boils if you ___ it to 100 degrees.','heat','heated','would heat','A general fact uses the present in both parts.']]},
+{t:'Relative clauses',x:'Use who for people, which for things and that for either in defining clauses. Use whose for possession. Non-defining clauses add extra information, are separated by commas and cannot use that.',q:[['The woman ___ lives next door is a doctor.','who','which','whose','Who refers to a person.'],['This is the book ___ I told you about.','which','who','whose','Which refers to a thing.'],['My brother, ___ lives in Canada, is visiting us.','who','that','whose','A non-defining clause cannot use that.'],['She is the student ___ essay won the prize.','whose','who','which','Whose shows possession.']]},
+{t:'Articles',x:'Use a or an with singular countable nouns mentioned for the first time. Use the for something specific that both people know, things that are unique, and superlatives. Use no article for general plural and uncountable nouns.',q:[['I bought a jacket and a scarf. ___ jacket was expensive.','The','A','No article','The jacket has already been mentioned.'],['___ sun rises in the east.','The','A','No article','There is only one sun.'],['She is ___ best student in the class.','the','a','no article','Superlatives take the.'],['___ honesty is important in any job.','No article','The','An','Uncountable nouns used in general take no article.']]}
+];
+let gi=0,gfin=null;
+function drawG(){
+  $('#gtabs').innerHTML=GR.map((g,i)=>`<button data-i="${i}" aria-pressed="${i===gi}">${g.t}</button>`).join('');
+  $('#gt').textContent=GR[gi].t;$('#gx').textContent=GR[gi].x;$('#gs').textContent='';
+  gfin=mkQuiz($('#gq'),GR[gi].q,true);
+}
+$('#gtabs').onclick=e=>{const b=e.target.closest('button');if(b){gi=+b.dataset.i;drawG()}};
+$('#gq').addEventListener('graded',()=>{if($('#gq').querySelectorAll('input:checked').length===GR[gi].q.length)$('#gs').textContent='Lesson score: '+gfin()+' out of '+GR[gi].q.length+'.'});
+drawG();
+const LV=[
+['She ___ coffee every morning.','drinks','drink','drinking'],['There aren’t ___ chairs in the room.','any','some','a'],['I’m ___ than my brother.','taller','more tall','tallest'],
+['If I ___ you, I’d apply for that job.','were','am','will be'],['He asked me where ___.','I lived','did I live','do I live'],['The report ___ by the team last week.','was finished','finished','has finishing'],
+['I wish I ___ harder when I was at school.','had studied','studied','would study'],['By next June, she ___ here for ten years.','will have worked','will work','has worked'],['Not only ___ late, but he also forgot the documents.','did he arrive','he arrived','arrived he'],
+['The proposal, ___ merits are debatable, has been approved.','whose','which its','of who the'],['Had it not been for your help, we ___ the deadline.','would have missed','would miss','will miss'],['She is said ___ the first woman to climb the peak.','to have been','being','to be have']];
+let lvf=null;
+function drawLv(){lvf=mkQuiz($('#lvq'),LV,false);$('#lvs').textContent=''}
+$('#lvf').onclick=()=>{
+  if($('#lvq').querySelectorAll('input:checked').length<LV.length){$('#lvs').textContent='Answer all '+LV.length+' questions first.';return}
+  const n=lvf();
+  const r=n<=3?['A2','below 4.0']:n<=6?['B1','about 4.0 to 5.0']:n<=9?['B2','about 5.5 to 6.5']:['C1','about 7.0 to 8.0'];
+  $('#lvs').textContent='You scored '+n+' out of '+LV.length+'. Estimated level: '+r[0]+', roughly IELTS '+r[1]+'. This is only a rough guide.';
+};
+$('#lvr').onclick=drawLv;drawLv();
+</script>
+</body>
 </html>
