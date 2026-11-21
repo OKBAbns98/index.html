@@ -384,7 +384,14 @@ e1.value=ld('essay1','');e1.oninput=()=>{sv('essay1',e1.value);c1()};c1();
 /* AI evaluation */
 let sampler=null;
 const RUBRIC='You are an experienced IELTS examiner and coach. Be honest, specific and encouraging. Write plain text only, with no markdown and no asterisks. Use short labelled lines and keep the whole answer under 300 words.';
-(window.claude?claude.use('sample'):Promise.resolve(null)).then(s=>{sampler=s;if(s)document.querySelectorAll('.aib').forEach(b=>b.hidden=false)}).catch(()=>{});
+const AI_ENDPOINT='';  // paste your Worker address here, e.g. https://english-arena-ai.your-name.workers.dev
+async function remoteSampler(prompt){
+  const r=await fetch(AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+  if(!r.ok){const e=new Error('ai');e.code=r.status===429?'rate_limited':'failed';throw e}
+  const d=await r.json();return{text:d.text||''};
+}
+const showAI=()=>document.querySelectorAll('.aib').forEach(b=>b.hidden=false);
+(window.claude?claude.use('sample'):Promise.resolve(null)).then(s=>{sampler=s||(AI_ENDPOINT?remoteSampler:null);if(sampler)showAI()}).catch(()=>{if(AI_ENDPOINT){sampler=remoteSampler;showAI()}});
 async function runAI(btn,out,prompt){
   if(!sampler)return;
   btn.disabled=true;out.textContent='Evaluating…';
